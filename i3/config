@@ -14,10 +14,10 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:monospace 9
+font pango:monospace 11
 
 # thin borders
-hide_edge_borders both
+#hide_edge_borders both
 
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
@@ -30,7 +30,7 @@ hide_edge_borders both
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec urxvt
+bindsym $mod+Return exec st
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -40,7 +40,7 @@ bindsym $mod+Shift+q kill
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
-bindsym $mod+d exec --no-startup-id j4-dmenu-desktop --dmenu="dmenu -sb red -i -fn Monospace"
+bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu="dmenu -sb red -i"
 
 # change focus
 bindsym $mod+j focus left
@@ -60,8 +60,7 @@ bindsym $mod+Shift+k move down
 bindsym $mod+Shift+l move up
 bindsym $mod+Shift+ntilde move right
 
-# alternatively, you can use the cursor keys:
-bindsym $mod+Shift+Left move left
+# alternatively, you can use the cursor keys: bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
@@ -93,8 +92,8 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 
 # switch to workspace
-bindsym $mod+1 workspace 1
-bindsym $mod+2 workspace 2
+bindsym $mod+1 workspace 1:Browser
+bindsym $mod+2 workspace 2:Vim
 bindsym $mod+3 workspace 3
 bindsym $mod+4 workspace 4
 bindsym $mod+5 workspace 5
@@ -105,8 +104,8 @@ bindsym $mod+9 workspace 9
 bindsym $mod+0 workspace 10
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace 1
-bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+1 move container to workspace 1:Browser
+bindsym $mod+Shift+2 move container to workspace 2:Vim
 bindsym $mod+Shift+3 move container to workspace 3
 bindsym $mod+Shift+4 move container to workspace 4
 bindsym $mod+Shift+5 move container to workspace 5
@@ -128,8 +127,6 @@ bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+z exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
-# lock
-bindsym $mod+Shift+x exec i3lock -p win -i ~/.config/i3/lock.png 
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -157,7 +154,7 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 #f3f4f5
-set $bg-color            #ffcc00
+set $bg-color            #3399ff
 set $inactive-bg-color   #222222
 set $text-color          #020202
 set $inactive-text-color #b8b894
@@ -176,7 +173,7 @@ client.urgent           $urgent-bg-color   $urgent-bg-color   $text-color       
 # finds out, if available)
 bar {
     status_command i3status
-    position top
+    position bottom
     font pango:monospace 11
 
 	colors {
@@ -226,8 +223,8 @@ bindsym $mod+F8 exec mocp --next
 # App shortcuts
 bindsym $mod+w exec "/usr/bin/firefox"
 bindsym $mod+n exec "/usr/bin/thunar"
-bindsym $mod+s exec "/usr/bin/spotify"
 bindsym $mod+c exec "/usr/bin/code"
+bindsym $mod+e exec "/bin/vifm"
 
 # Redirect sound to headphones
 bindsym $mod+m exec "/usr/local/bin/switch-audio-port"
@@ -238,11 +235,12 @@ bindsym XF86MonBrightnessDown exec xbacklight -dec 5
 
 # Misc
 for_window [class="^.*"] border pixel 1
+bindsym $mod+Shift+x exec "/home/krystian/.config/i3/lock.sh"
 
 # Gaps
-gaps inner 8
-gaps outer 3
-smart_gaps on
+#gaps inner 8
+#gaps outer 3
+#smart_gaps on
 
 # Autostart apps
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
@@ -250,3 +248,29 @@ exec --no-startup-id "compton -cC"
 exec --no-startup-id nm-applet
 exec --no-startup-id "nitrogen --restore"
 exec --no-startup-id "sleep 2s && kalu"
+exec --no-startup-id "/usr/bin/spotify"
+exec --no-startup-id "/usr/local/bin/st -n dropdown"
+exec --no-startup-id "/usr/local/bin/st -n youtube"
+exec --no-startup-id "feh --bg-scale /home/krystian/Wallpapers/wall1.jpg"
+exec --no-startup-id "xrandr --refresh=75"
+exec --no-startup-id keepassxc
+
+for_window [instance="dropdown"] floating enable
+for_window [instance="dropdown"] resize set 1040 520
+for_window [instance="dropdown"] move scratchpad
+bindsym $mod+u [instance="dropdown"] scratchpad show; [instance="dropdown"] move position center
+
+for_window [instance="youtube"] floating enable
+for_window [instance="youtube"] resize set 1040 520
+for_window [instance="youtube"] move scratchpad
+bindsym $mod+y [instance="youtube"] scratchpad show; [instance="youtube"] move position center
+
+for_window [instance="spotify"] floating enable
+for_window [instance="spotify"] resize set 1400 800
+for_window [instance="spotify"] move scratchpad
+bindsym $mod+s [instance="spotify"] scratchpad show; [instance="spotify"] move position center
+
+for_window [instance="keepass"] floating enable
+for_window [instance="keepass"] resize set 1400 800
+for_window [instance="keepass"] move scratchpad
+bindsym $mod+p [instance="keepass"] scratchpad show; [instance="keepass"] move position center
